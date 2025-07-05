@@ -43,3 +43,17 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+
+  document.querySelectorAll('h1, h2, h3, h4').forEach(el => {
+    const text = el.textContent.trim(); // 取得文字內容並移除前後空白
+
+    // 判斷是否包含中文字（\u4e00-\u9fff 是常見中文編碼範圍）
+    const isChinese = /[\u4e00-\u9fff]/.test(text);
+
+    // 根據結果加上對應的 class
+    if (isChinese) {
+      el.classList.add('lang-zh'); // 如果是中文
+    } else {
+      el.classList.add('lang-en'); // 如果是英文
+    }
+  });
