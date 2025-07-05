@@ -1,0 +1,54 @@
+/* ✅ about.css — 關於我們頁面樣式 */
+
+/* ---------- 區塊：整體區域 ---------- */
+.about-intro {
+  padding: 80px 0; /* 上下間距大一點，區隔明顯 */
+  background-color: #F8F8F5; /* 淺色背景，營造溫暖感 */
+  color: #2E3426; /* 主色深綠 */
+}
+
+/* ---------- 內層左右分欄排版 ---------- */
+.about-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.about-text {
+  flex: 1;
+}
+
+.about-text h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.about-text p {
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.about-image {
+  flex: 1;
+  text-align: center;
+}
+
+.about-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px; /* 圓角圖片，看起來更柔和 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- RWD 響應式 ---------- */
+@media (max-width: 768px) {
+  .about-wrapper {
+    flex-direction: column;
+  }
+
+  .about-image {
+    margin-top: 2rem;
+  }
+}

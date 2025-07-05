@@ -1,0 +1,122 @@
+/* ✅ services.css — 服務介紹頁樣式 */
+
+/* ---------- Hero 區塊：圖文左右區塊 ---------- */
+.services-hero {
+  background-color: #F8F8F5; /* 淺米色背景讓圖文更清爽 */
+  padding: 80px 0;
+  color: #2E3426; /* 主色：深綠色 */
+}
+
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap; /* 避免小螢幕爆版 */
+}
+
+.hero-text {
+  flex: 1;
+  min-width: 280px;
+}
+
+.hero-text h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.hero-text p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.hero-img {
+  flex: 1;
+  min-width: 280px;
+  text-align: center;
+}
+
+.hero-img img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* ---------- 商品模組區塊 ---------- */
+.services-products {
+  padding: 80px 0;
+  background-color: #fff;
+}
+
+.services-products h3 {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  color: #2E3426;
+  text-align: center;
+}
+
+.product-list {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.product-card {
+  width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #fefefe;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0; /* 預設隱藏等待淡入 */
+  transform: translateY(20px);
+}
+
+.product-card.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.product-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.product-card h4 {
+  font-size: 1.2rem;
+  margin: 1rem;
+  color: #2E3426;
+}
+
+.product-card p {
+  font-size: 1rem;
+  margin: 0 1rem 1.5rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+/* ---------- RWD 響應式 ---------- */
+@media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+  }
+
+  .product-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .product-card {
+    width: 90%;
+  }
+}

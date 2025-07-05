@@ -1,0 +1,59 @@
+/* ✅ index.css — 首頁樣式 */
+
+/* ---------- Hero 區塊 ---------- */
+.hero-section {
+  background-color: #F0F1EB; /* 淡米綠背景，舒適自然感 */
+  padding: 100px 0;
+  text-align: center;
+  color: #2E3426;
+}
+
+.hero-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.hero-section .hero-img {
+  max-width: 360px;
+  margin: 0 auto;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ---------- Call to Action 按鈕 ---------- */
+.hero-section .btn-main {
+  display: inline-block;
+  margin-top: 24px;
+  background-color: #2E3426;
+  color: #fff;
+  padding: 12px 32px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.hero-section .btn-main:hover {
+  background-color: #1e221a;
+}
+
+/* ---------- RWD ---------- */
+@media (max-width: 768px) {
+  .hero-section h2 {
+    font-size: 2rem;
+  }
+
+  .hero-section p {
+    font-size: 1rem;
+  }
+
+  .hero-section .hero-img {
+    max-width: 260px;
+  }
+}
