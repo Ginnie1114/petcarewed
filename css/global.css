@@ -46,22 +46,30 @@ header#site-header {
   top: 0;
   z-index: 999;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
 }
 
 header .container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px ;
+  padding: 4px 12px; /* 再縮小，上下 4px，左右 12px */
 }
 
 .logo {
   text-decoration: none;
   font-weight: 900;
-  font-size: 2.5rem;
+  font-size: 3rem; /* 再縮小字體 */
   color: #2E3426;
+  line-height: 1;    /* 加這行讓 logo 不會拉高 header */
+  margin: 0;         /* 確保沒有多餘外距 */
+  padding: 0;
 }
 
+header .container > * {
+  margin: 0;
+  padding: 0;
+}
 .nav-links {
   list-style: none;
   display: flex;
@@ -74,7 +82,7 @@ header .container {
   text-decoration: none;
   color: #2E3426;
   position: relative;
-  padding-bottom: 4px;
+  padding-bottom: 5px;
 }
 
 .nav-links a::after {
@@ -109,7 +117,7 @@ footer {
   background-color: #2E3426;
   color: #fff;
   padding: 40px 0;
-  margin-top: 80px;
+  margin-top: 3px;
 }
 
 .footer-top {
@@ -183,9 +191,12 @@ footer {
 
 /* 手機版導覽列滿版選單 */
 @media (max-width: 768px) {
+   nav {
+    display: none;
+  }
   .hamburger {
     display: flex;
-    margin-left: auto;
+    margin-left: auto; /* 讓漢堡選單靠右 */
   }
   .nav-links {
     position: fixed;
@@ -205,7 +216,7 @@ footer {
   .nav-links.open {
     transform: translateX(0);
   }
-  header .container {
-    padding: 12px 0;
+    header .container {
+      padding: 4px 12px ; /* 手機版導覽列的 padding */
+    }
   }
-}
