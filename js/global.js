@@ -28,7 +28,8 @@ window.addEventListener("scroll", function () {
 document.addEventListener("DOMContentLoaded", function () {
   const hamburger = document.getElementById("hamburger-btn");
   const navLinks = document.querySelector(".nav-links");
-
+  console.log('hamburger:', hamburger);
+  console.log('navLinks:', navLinks);
   hamburger.addEventListener("click", function () {
     hamburger.classList.toggle("active");
     navLinks.classList.toggle("open");
