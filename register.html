@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunSafe｜註冊</title>
+     <!-- 載入 Google Fonts：Lilita One（英文）與 Noto Sans TC（繁體中文） -->
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Noto+Sans+TC&display=swap" rel="stylesheet">
+  <!-- icon -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconoir@7.6.0/css/iconoir.css">
+  <!-- 全站共用樣式 -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/index.css">
+
+
+</head>
+<body>
+<header id="site-header">
+  <!-- Header 內容將由 global.js 動態生成 -->
+</header>
+
+
+    <!-- 🐾 註冊區塊 -->
+<section class="contact-section">
+  <div class="container">
+    <h2>會員註冊</h2>
+    <p>歡迎加入 FunSafe！請填寫以下資料以註冊帳號。</p>
+
+    <!-- 註冊失敗訊息 -->
+    <div id="register-error-msg" style="display:none;color:#c00;background:#fee;padding:8px 16px;border-radius:6px;margin-bottom:16px;"></div>
+
+    <div class="form-alert" style="display: none;">
+      <p>註冊成功，我們已收到您的資訊！</p>
+      <button class="close-alert">關閉</button>
+    </div>
+
+    <!-- ✅ 註冊表單 -->
+    <form action="php/register.php" method="post">
+      <label for="username">帳號</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">密碼</label>
+      <input type="password" id="password" name="password" required>
+
+      <label for="name">姓名</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <button type="submit">註冊</button>
+    </form>
+  </div>
+</section>
+
+<!-- ✅ 可選：簡單 JS，成功送出後顯示提示（需要搭配後端轉跳） -->
+<script>
+  // 若有需要可控制 alert 顯示
+  const alertBox = document.querySelector('.form-alert');
+  const closeBtn = document.querySelector('.close-alert');
+  closeBtn?.addEventListener('click', () => {
+    alertBox.style.display = 'none';
+  });
+
+  // 顯示註冊失敗訊息
+  const params = new URLSearchParams(location.search);
+  if (params.get('error')) {
+    let msg = '';
+    if (params.get('error') === 'exists') {
+      msg = '此帳號已註冊，請直接登入。';
+    } else if (params.get('error') === 'insert') {
+      msg = '註冊失敗，請稍後再試。';
+    } else {
+      msg = '請填寫所有欄位。';
+    }
+    document.getElementById('register-error-msg').textContent = msg;
+    document.getElementById('register-error-msg').style.display = 'block';
+  }
+</script>
+
+
+
+
+  <!-- 🦶 頁尾 Footer（共用） -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">Happy pets , happy you . </div>
+      <div class="footer-columns">
+        <div>
+          <h4>Location</h4>
+          <p>1234 Pet St., Taipei, Taiwan</p>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>Email: info@funsafe.com<br>Phone: 02-1234-5678</p>
+        </div>
+        <div>
+          <h4>Follow us</h4>
+          <div class="footer-social">
+            <a href="https://instagram.com/" target="_blank" aria-label="Instagram">
+              <i class="iconoir-instagram"></i>
+            </a>
+            <a href="https://facebook.com/" target="_blank" aria-label="Facebook">
+              <i class="iconoir-facebook"></i>
+            </a>
+            <a href="https://line.me/" target="_blank" aria-label="Line">
+              <i class="iconoir-chat-bubble"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+  </footer>
+
+  <!-- 全站共用 JS -->
+  <script src="js/global.js"></script>
+  <script src="js/index.js"></script>
+
+
+
+</body>
+</html>

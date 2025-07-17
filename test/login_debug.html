@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家登入調試</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .step { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .result { margin: 10px 0; padding: 10px; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button { background: #007cba; color: white; border: none; padding: 10px 20px; cursor: pointer; margin: 5px; }
+        input { padding: 8px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 商家登入調試工具</h1>
+    
+    <div class="step">
+        <h2>步驟 1: 檢查當前 Session</h2>
+        <button onclick="checkCurrentSession()">檢查當前 Session</button>
+        <div id="session-result"></div>
+    </div>
+    
+    <div class="step">
+        <h2>步驟 2: 商家登入</h2>
+        <input type="text" id="username" placeholder="用戶名" value="admin">
+        <input type="password" id="password" placeholder="密碼" value="password">
+        <button onclick="adminLogin()">商家登入</button>
+        <div id="login-result"></div>
+    </div>
+    
+    <div class="step">
+        <h2>步驟 3: 測試商家 API</h2>
+        <button onclick="testAdminAPI()">測試 admin_get_users.php</button>
+        <div id="api-result"></div>
+    </div>
+    
+    <div class="step">
+        <h2>步驟 4: 測試 interact.js 初始化</h2>
+        <button onclick="testInteractInit()">測試 interact.js 初始化</button>
+        <div id="init-result"></div>
+    </div>
+    
+    <div class="step">
+        <h2>步驟 5: 清除 Session</h2>
+        <button onclick="clearSession()">清除 Session</button>
+        <div id="clear-result"></div>
+    </div>
+    
+    <script>
+        async function checkCurrentSession() {
+            const resultDiv = document.getElementById('session-result');
+            try {
+                const response = await fetch('php/api/get_session_status.php');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="result info">
+                        <h3>當前 Session 狀態</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">錯誤: ${error.message}</div>`;
+            }
+        }
+        
+        async function adminLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('login-result');
+            
+            try {
+                const formData = new FormData();
+                formData.append('username', username);
+                formData.append('password', password);
+                
+                const response = await fetch('php/login.php', {
+                    method: 'POST',
+                    body: formData,
+                    redirect: 'manual' // 不自動重定向
+                });
+                
+                resultDiv.innerHTML = `
+                    <div class="result ${response.ok ? 'success' : 'error'}">
+                        <h3>登入響應</h3>
+                        <p>狀態碼: ${response.status}</p>
+                        <p>重定向: ${response.headers.get('Location') || '無'}</p>
+                    </div>
+                `;
+                
+                // 檢查登入後的 session
+                setTimeout(checkCurrentSession, 1000);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">登入錯誤: ${error.message}</div>`;
+            }
+        }
+        
+        async function testAdminAPI() {
+            const resultDiv = document.getElementById('api-result');
+            try {
+                const response = await fetch('php/admin_get_users.php');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="result ${data.success ? 'success' : 'error'}">
+                        <h3>admin_get_users.php 響應</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">API 錯誤: ${error.message}</div>`;
+            }
+        }
+        
+        async function testInteractInit() {
+            const resultDiv = document.getElementById('init-result');
+            try {
+                // 模擬 interact.js 的初始化邏輯
+                const sessionResponse = await fetch('php/api/get_session_status.php');
+                const sessionData = await sessionResponse.json();
+                
+                let initResult = {
+                    sessionData: sessionData,
+                    shouldShowAdminView: sessionData.loggedIn && sessionData.role === 'shop',
+                    shouldShowMemberView: sessionData.loggedIn && sessionData.role !== 'shop',
+                    shouldShowGuestView: !sessionData.loggedIn
+                };
+                
+                resultDiv.innerHTML = `
+                    <div class="result info">
+                        <h3>interact.js 初始化模擬</h3>
+                        <pre>${JSON.stringify(initResult, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">初始化測試錯誤: ${error.message}</div>`;
+            }
+        }
+        
+        async function clearSession() {
+            const resultDiv = document.getElementById('clear-result');
+            try {
+                const response = await fetch('php/logout.php');
+                resultDiv.innerHTML = `<div class="result success">Session 已清除</div>`;
+                setTimeout(checkCurrentSession, 1000);
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">清除 Session 錯誤: ${error.message}</div>`;
+            }
+        }
+        
+        // 頁面載入時檢查當前 session
+        window.onload = function() {
+            checkCurrentSession();
+        };
+    </script>
+</body>
+</html>

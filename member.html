@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FunSafe｜會員專區</title>
+  <!-- 載入 Google Fonts：Lilita One（英文）與 Noto Sans TC（繁體中文） -->
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Noto+Sans+TC&display=swap" rel="stylesheet">
+  <!-- icon -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconoir@7.6.0/css/iconoir.css">
+  <!-- 全站共用樣式 -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/member.css">
+</head>
+<body>
+<header id="site-header">
+  <!-- 導覽列將由 global.js 動態生成 -->
+</header>
+<main>
+  <section id="member-info">
+    <h2>會員資料</h2>
+    <div id="member-details">
+      <!-- 會員資料由 JS 載入 -->
+      <p>載入中...</p>
+    </div>
+  </section>
+  <section id="pets-section">
+    <h2>我的寵物</h2>
+    <div id="pets-list">
+      <!-- 寵物列表由 JS 動態載入 -->
+      <p>載入中...</p>
+    </div>
+    <button id="add-pet-btn">新增寵物</button>
+    
+    <!-- 新增/編輯寵物表單（Modal 彈窗） -->
+    <div id="pet-modal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3 id="modal-title">新增寵物</h3>
+        <form id="pet-form">
+          <input type="hidden" id="pet-id" name="pet_id">
+          <label>寵物名稱：<input type="text" id="pet-name" name="name" required></label>
+          <label>種類：<input type="text" id="pet-type" name="type"></label>
+          <label>品種：<input type="text" id="pet-breed" name="breed"></label>
+          <label>性別：
+            <select id="pet-gender" name="gender">
+              <option value="male">公</option>
+              <option value="female">母</option>
+              <option value="other">其他</option>
+            </select>
+          </label>
+          <label>生日：<input type="date" id="pet-birthdate" name="birthdate"></label>
+          <label>備註：<textarea id="pet-notes" name="notes"></textarea></label>
+          <button type="submit">儲存</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <!-- 頁尾內容 -->
+</footer>
+<script src="js/global.js"></script>
+<script src="js/member.js"></script>
+</body>
+</html>

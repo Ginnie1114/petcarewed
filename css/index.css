@@ -2,7 +2,7 @@
 
 /* ---------- Hero 區塊 ---------- */
 .hero-section {
-  background: url("../assets/超可愛.jpg") center/cover no-repeat ;
+  background: url("../assets/首頁圖.jpg") 80% center/cover no-repeat ;
   padding: 160px 0;              /* 高度可再依需求調整 */
   position: relative;
   color: #fff;                   /* 文字改白色較易閱讀 */

@@ -12,40 +12,28 @@
 
 
   <!-- 共用樣式 -->
-  <link rel="stylesheet" href="./css/global.css">
-  <!-- 此頁專用樣式 -->
-  <link rel="stylesheet" href="./css/services.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/services.css">
 </head>
 <body>
 <header id="site-header">
-  <div class="container">
-    <h1><a href="index.html" class="logo">FunSafe</a></h1>
-    <!-- 漢堡按鈕（手機版顯示） -->
-    <div class="hamburger" id="hamburger-btn" aria-label="開啟主選單" tabindex="0">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="about.html">About</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="contact.html" class="book-now-btn">Book Now</a></li>
-      </ul>
-    </nav>
-  </div>
+  <!-- Header 內容將由 global.js 動態生成 -->
 </header>
-  <!-- 🔍 區塊 1：導覽下大圖 + 主標與介紹 -->
+<main>
+  <!-- 🐾 Hero 區塊 -->
   <section class="services-hero">
     <div class="container">
       <div class="hero-content">
         <div class="hero-text">
           <h2>Explore what we offer</h2>
-          <p>我們提供多元化的寵物照護與陪伴服務，讓毛孩與飼主都能安心放鬆。</p>
+          <p>我們提供多元化的寵物照護與陪伴服務<br>
+            ·拍照、錄影即時回報。 <br>
+            ·以毛孩安全為第一。<br>
+            ·根據毛孩年齡、個性、需求量身打造。<br>
+            ·讓毛孩與飼主都能安心放鬆。</p>
         </div>
         <div class="hero-img">
-          <img src="./assets/超可愛.jpg" alt="Hero Image">
+          <img src="./assets/抓.jpeg" alt="Hero Image">
         </div>
       </div>
     </div>
@@ -59,33 +47,77 @@
 
         <!-- 商品模組（一） -->
         <div class="product-card">
-          <img src="./assets/超可愛.jpg" alt="Service 1">
+          <img src="./assets/到府.png" alt="Service 1">
           <h4>寵物到府陪伴</h4>
           <p>由照護員至府上陪伴毛孩，依照需求餵食、散步與陪玩。</p>
         </div>
 
         <!-- 商品模組（二） -->
         <div class="product-card">
-          <img src="./assets/超可愛.jpg" alt="Service 2">
+          <img src="./assets/接送.png" alt="Service 2">
           <h4>臨時接送服務</h4>
           <p>提供安全可靠的寵物接送服務，包含看診、洗澡與安置。</p>
         </div>
 
         <!-- 商品模組（三） -->
         <div class="product-card">
-          <img src="./assets/超可愛.jpg" alt="Service 3">
+          <img src="./assets/敏感.png" alt="Service 3">
+          <h4>敏感毛孩專屬照護</h4>
+          <p>為容易緊張敏感的毛孩設計，在熟悉地方的活動降低刺激。</p>
+        </div>
+
+                <!-- 商品模組（四） -->
+        <div class="product-card">
+          <img src="./assets/醫療.png" alt="Service 3">
           <h4>長期照護專案</h4>
           <p>針對年長、病後恢復或特殊需求毛孩設計的長照方案。</p>
         </div>
+                <!-- 商品模組（五） -->
+        <div class="product-card">
+          <img src="./assets/觀察.png" alt="Service 3">
+          <h4>行為觀察</h4>
+          <p>協助新手飼主了解毛孩行為，辨識是否異常狀況（非行為矯正訓練）</p>
+        </div>
+                <!-- 商品模組（六） -->
+        <div class="product-card">
+          <img src="./assets/客制.png" alt="Service 3">
+          <h4>客製化照護計畫</h4>
+          <p>由飼主與照護員共同討論制定，打造最適合你家毛孩的安心方案。</p>
+        </div>
+
 
       </div>
     </div>
   </section>
 
+  <div style="text-align: center;   background-color: #F8F8F5;" >
+    <a href="interact.html" class="btn-main">聯絡我們</a>
+  </div>
+    
+<div class="carousel-container">
+  <div class="carousel-track" id="carouselTrack">
+    <img src="assets/坐車.JPG" class="carousel-image" alt="5">
+    <img src="assets/洗澡.JPG" class="carousel-image" alt="5">
+    <img src="assets/超可愛.jpg" class="carousel-image" alt="5">
+    <img src="assets/餵食.JPG" class="carousel-image" alt="5">
+    <img src="assets/怪.JPG" class="carousel-image" alt="5">
+    <img src="assets/怕怕.jpeg" class="carousel-image" alt="5">
+    <img src="assets/散步.JPG" class="carousel-image" alt="5">
+    <img src="assets/超怕.jpeg" class="carousel-image" alt="5">
+
+  </div>
+</div>
+
+
+
+
+
+
+
   <!-- 🦶 頁尾 Footer（共用） -->
   <footer>
     <div class="container">
-      <div class="footer-top">Your Site Title</div>
+      <div class="footer-top">Safe First, Fun Always.</div>
       <div class="footer-columns">
         <div>
           <h4>Location</h4>
@@ -113,9 +145,8 @@
   </footer>
 
   <!-- 共用功能 -->
-  <script src="./js/global.js"></script>
-  <!-- 此頁 JS（商品 hover 動畫等） -->
-  <script src="./js/services.js"></script>
+  <script src="js/global.js"></script>
+  <script src="js/services.js"></script>
 
 
 

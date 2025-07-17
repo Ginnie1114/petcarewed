@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家界面測試</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/interact.css">
+    <style>
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .debug-info h3 {
+            margin-top: 0;
+            color: #007cba;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #17a2b8; }
+    </style>
+</head>
+<body>
+
+<header id="site-header">
+    <div class="container">
+        <h1><a href="index.html" class="logo">FunSafe</a></h1>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="interact.html">互動中心</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <h1>🏪 商家界面測試</h1>
+    
+    <div class="debug-info">
+        <h3>📊 調試資訊</h3>
+        <div id="debug-output"></div>
+    </div>
+    
+    <div class="debug-info">
+        <h3>🔑 登入狀態</h3>
+        <div id="session-status">載入中...</div>
+        <button onclick="checkSession()">刷新登入狀態</button>
+    </div>
+    
+    <div class="debug-info">
+        <h3>👥 會員列表</h3>
+        <div id="users-list-test">載入中...</div>
+        <button onclick="loadUsersList()">載入會員列表</button>
+    </div>
+    
+    <!-- 直接顯示管理界面 -->
+    <div class="admin-layout" style="display: block;">
+        <div class="users-panel">
+            <h3>會員列表</h3>
+            <div class="search-box">
+                <input type="text" id="user-search" placeholder="搜尋會員姓名或Email...">
+            </div>
+            <div class="users-list" id="users-list">
+                <p>載入中...</p>
+            </div>
+        </div>
+        
+        <div class="conversation-panel">
+            <div id="admin-conversation" class="admin-conversation">
+                <div class="conversation-placeholder">
+                    <p>請選擇左側會員以開始對話</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    let allUsers = [];
+    let currentUserId = null;
+    
+    function debugLog(message, type = 'info') {
+        const debugOutput = document.getElementById('debug-output');
+        const timestamp = new Date().toLocaleTimeString();
+        const className = type === 'error' ? 'error' : (type === 'success' ? 'success' : 'info');
+        debugOutput.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+        console.log(`[${timestamp}] ${message}`);
+    }
+    
+    async function checkSession() {
+        try {
+            debugLog('正在檢查登入狀態...');
+            const response = await fetch('php/api/get_session_status.php');
+            const data = await response.json();
+            
+            const statusDiv = document.getElementById('session-status');
+            if (data.loggedIn) {
+                statusDiv.innerHTML = `
+                    <div class="success">✅ 已登入</div>
+                    <p><strong>姓名:</strong> ${data.name}</p>
+                    <p><strong>角色:</strong> ${data.role}</p>
+                    <p><strong>未讀訊息:</strong> ${data.unread_messages}</p>
+                `;
+                debugLog(`登入成功: ${data.name} (${data.role})`, 'success');
+                
+                if (data.role === 'shop') {
+                    debugLog('檢測到商家角色，載入商家功能', 'success');
+                    loadUsersList();
+                } else {
+                    debugLog('非商家角色，無法使用商家功能', 'error');
+                }
+            } else {
+                statusDiv.innerHTML = '<div class="error">❌ 未登入</div>';
+                debugLog('用戶未登入', 'error');
+            }
+        } catch (error) {
+            debugLog(`檢查登入狀態錯誤: ${error.message}`, 'error');
+            document.getElementById('session-status').innerHTML = '<div class="error">❌ 檢查失敗</div>';
+        }
+    }
+    
+    async function loadUsersList() {
+        try {
+            debugLog('正在載入會員列表...');
+            const response = await fetch('php/admin_get_users.php');
+            const data = await response.json();
+            
+            const usersListTestDiv = document.getElementById('users-list-test');
+            const usersListDiv = document.getElementById('users-list');
+            
+            if (data.success) {
+                allUsers = data.users;
+                debugLog(`成功載入 ${data.users.length} 個會員`, 'success');
+                
+                // 顯示在測試區域
+                usersListTestDiv.innerHTML = data.users.map(user => `
+                    <div style="border: 1px solid #ddd; padding: 10px; margin: 5px 0;">
+                        <strong>${user.name}</strong> (ID: ${user.id})<br>
+                        📧 ${user.email}<br>
+                        💬 未讀: ${user.unread_count || 0} 則
+                    </div>
+                `).join('');
+                
+                // 顯示在實際界面
+                renderUsersList(data.users);
+                
+            } else {
+                debugLog(`載入會員列表失敗: ${data.message}`, 'error');
+                if (data.debug) {
+                    debugLog(`調試資訊: ${JSON.stringify(data.debug)}`, 'error');
+                }
+                usersListTestDiv.innerHTML = '<div class="error">載入失敗</div>';
+                usersListDiv.innerHTML = '<p>載入失敗</p>';
+            }
+        } catch (error) {
+            debugLog(`載入會員列表錯誤: ${error.message}`, 'error');
+            document.getElementById('users-list-test').innerHTML = '<div class="error">載入錯誤</div>';
+            document.getElementById('users-list').innerHTML = '<p>載入錯誤</p>';
+        }
+    }
+    
+    function renderUsersList(users) {
+        const container = document.getElementById('users-list');
+        if (users.length === 0) {
+            container.innerHTML = '<p>目前沒有會員</p>';
+            return;
+        }
+
+        container.innerHTML = users.map(user => `
+            <div class="user-item" data-user-id="${user.id}">
+                <strong>${user.name}</strong>
+                <div>${user.email}</div>
+                <small>最後訊息: ${user.last_message_time || '無'}</small>
+            </div>
+        `).join('');
+
+        // 為用戶項目添加點擊事件
+        document.querySelectorAll('.user-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.user-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                const userId = this.dataset.userId;
+                currentUserId = userId;
+                debugLog(`選擇了會員 ID: ${userId}`, 'info');
+                loadAdminConversation(userId);
+            });
+        });
+    }
+    
+    async function loadAdminConversation(userId) {
+        try {
+            debugLog(`正在載入會員 ${userId} 的對話...`);
+            const response = await fetch(`php/admin_get_user_data.php?user_id=${userId}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                debugLog(`成功載入會員對話，共 ${data.messages.length} 則訊息`, 'success');
+                renderAdminConversation(data);
+            } else {
+                debugLog(`載入對話失敗: ${data.message}`, 'error');
+                document.getElementById('admin-conversation').innerHTML = '<p>載入對話失敗</p>';
+            }
+        } catch (error) {
+            debugLog(`載入對話錯誤: ${error.message}`, 'error');
+            document.getElementById('admin-conversation').innerHTML = '<p>載入失敗</p>';
+        }
+    }
+    
+    function renderAdminConversation(data) {
+        const container = document.getElementById('admin-conversation');
+        
+        container.innerHTML = `
+            <div class="admin-user-info">
+                <h4>會員資訊</h4>
+                <p><strong>姓名：</strong>${data.user.name}</p>
+                <p><strong>Email：</strong>${data.user.email}</p>
+            </div>
+            
+            <div class="admin-pets-list">
+                <h4>寵物列表</h4>
+                ${data.pets.length === 0 ? '<p>該會員尚未註冊寵物</p>' : 
+                  data.pets.map(pet => `
+                    <span class="pet-tag-admin">${pet.name} (${pet.type || '未知'})</span>
+                  `).join('')
+                }
+            </div>
+            
+            <div class="conversation-messages">
+                <h4>對話記錄</h4>
+                <div class="messages-container" style="max-height: 400px; overflow-y: auto;">
+                    ${renderAdminMessages(data.messages)}
+                </div>
+            </div>
+            
+            <div class="admin-reply-form">
+                <h4>回覆訊息</h4>
+                <form id="admin-reply-form">
+                    <textarea id="admin-reply-content" placeholder="輸入回覆內容..." required rows="3"></textarea>
+                    <button type="submit">傳送回覆</button>
+                </form>
+            </div>
+        `;
+
+        // 綁定回覆表單事件
+        document.getElementById('admin-reply-form').addEventListener('submit', handleAdminReply);
+    }
+    
+    function renderAdminMessages(messages) {
+        if (messages.length === 0) {
+            return '<p>目前沒有對話記錄</p>';
+        }
+
+        return messages.map(message => `
+            <div class="message-card ${message.sender === 'user' ? 'received' : 'sent'}">
+                <div class="message-content">
+                    <div class="message-header">
+                        <strong>${message.sender === 'user' ? '會員' : '客服'}</strong>
+                        ${message.pet_name ? `<span class="pet-tag">${message.pet_name}</span>` : ''}
+                        <span class="message-time">${message.created_at}</span>
+                    </div>
+                    <p>${message.content.replace(/\n/g, '<br>')}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    async function handleAdminReply(e) {
+        e.preventDefault();
+        
+        const content = document.getElementById('admin-reply-content').value.trim();
+        
+        if (!content) {
+            alert('請輸入回覆內容');
+            return;
+        }
+        
+        try {
+            debugLog(`正在發送回覆給會員 ${currentUserId}...`);
+            
+            const formData = new FormData();
+            formData.append('user_id', currentUserId);
+            formData.append('content', content);
+
+            const response = await fetch('php/admin_send_message.php', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                debugLog('回覆發送成功', 'success');
+                document.getElementById('admin-reply-form').reset();
+                loadAdminConversation(currentUserId); // 重新載入對話
+                alert('回覆已送出！');
+            } else {
+                debugLog(`回覆發送失敗: ${data.message}`, 'error');
+                alert(data.message || '傳送失敗');
+            }
+        } catch (error) {
+            debugLog(`回覆發送錯誤: ${error.message}`, 'error');
+            alert('傳送失敗，請稍後再試');
+        }
+    }
+    
+    // 頁面載入時自動檢查
+    window.addEventListener('load', function() {
+        debugLog('頁面載入完成', 'info');
+        checkSession();
+    });
+</script>
+
+</body>
+</html>

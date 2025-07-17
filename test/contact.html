@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FunSafe｜預約諮詢</title>
+  <!-- 載入 Google Fonts：Lilita One（英文）與 Noto Sans TC（繁體中文） -->
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Noto+Sans+TC&display=swap" rel="stylesheet">
+  <!-- icon -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconoir@7.6.0/css/iconoir.css">
+
+  <!-- 共用樣式 -->
+  <link rel="stylesheet" href="css/global.css">
+  <!-- 此頁專用樣式 -->
+  <link rel="stylesheet" href="css/contact.css">
+  <link rel="stylesheet" href="css/messages.css">
+</head>
+<body>
+
+<header id="site-header">
+  <!-- Header 內容將由 global.js 動態生成 -->
+</header>
+
+<!-- 會員登入後的訊息區塊 -->
+<section id="member-messages" class="container" style="display:none;">
+  <h2>我的訊息</h2>
+  <div class="messages-container" id="messages-container">
+    <!-- 訊息列表由 JS 動態載入 -->
+    <p>載入中...</p>
+  </div>
+  <hr>
+</section>
+
+<!-- 📩 聯絡表單區塊 -->
+<section class="contact-section">
+  <div class="container">
+    <h2 id="contact-title">預約諮詢</h2>
+    <p id="contact-subtitle">有任何問題或照護需求，歡迎填寫以下表單，我們將盡快回覆您。</p>
+
+    <div class="form-alert">
+      <p>已成功發送，我們會盡快跟您聯絡！</p>
+      <button class="close-alert">關閉</button>
+    </div>
+
+    <!-- ✅ 表單開始 -->
+    <form id="contact-form">
+      <!-- 未登入時顯示的欄位 -->
+      <div id="guest-fields">
+        <label for="name">姓名</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+        
+        <label for="phone">電話</label>
+        <input type="tel" id="phone" name="phone" required>
+      </div>
+
+      <!-- 登入後顯示的會員資訊 -->
+      <div id="member-fields" style="display:none;">
+        <div class="member-info-display">
+          <h3>會員資訊</h3>
+          <p><strong>姓名：</strong><span id="member-name-display"></span></p>
+          <p><strong>Email：</strong><span id="member-email-display"></span></p>
+        </div>
+        
+        <label for="pet-select">選擇寵物</label>
+        <select id="pet-select" name="pet_id">
+          <option value="">請選擇寵物</option>
+          <!-- 寵物選項由 JS 動態載入 -->
+        </select>
+      </div>
+
+      <label for="start-date">開始日期</label>
+      <input type="date" id="start-date" name="start-date" required>
+
+      <label for="end-date">結束日期</label>
+      <input type="date" id="end-date" name="end-date" required>
+      
+      <label for="message">訊息</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit" id="submit-btn">送出</button>
+    </form>
+
+    <!-- 會員專用：快速訊息按鈕 -->
+    <div id="quick-message-section" style="display:none;">
+      <hr>
+      <h3>或者傳送快速訊息</h3>
+      <form id="quick-message-form">
+        <textarea name="content" placeholder="輸入您的訊息..." required></textarea>
+        <button type="submit">傳送訊息</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- 🦶 頁尾 Footer（共用） -->
+<footer>
+  <div class="container">
+    <div class="footer-top">All the Fun, All the Safe.</div>
+    <div class="footer-columns">
+      <div>
+        <h4>Location</h4>
+        <p>1234 Pet St., Taipei, Taiwan</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>Email: info@funsafe.com<br>Phone: 02-1234-5678</p>
+      </div>
+      <div>
+        <h4>Follow us</h4>
+        <div class="footer-social">
+          <a href="https://instagram.com/" target="_blank" aria-label="Instagram">
+            <i class="iconoir-instagram"></i>
+          </a>
+          <a href="https://facebook.com/" target="_blank" aria-label="Facebook">
+            <i class="iconoir-facebook"></i>
+          </a>
+          <a href="https://line.me/" target="_blank" aria-label="Line">
+            <i class="iconoir-chat-bubble"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- 共用功能 -->
+<script src="js/global.js"></script>
+<!-- 此頁 JS 功能 -->
+<script src="js/contact.js"></script>
+
+</body>
+</html>

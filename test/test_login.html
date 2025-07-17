@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入測試</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin: 10px 0; }
+        label { display: block; margin-bottom: 5px; }
+        input, button { padding: 5px; margin: 5px 0; }
+        button { background: #007cba; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+        .result { margin: 20px 0; padding: 10px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>登入測試</h1>
+    
+    <div class="form-group">
+        <label for="username">使用者名稱:</label>
+        <input type="text" id="username" value="testuser">
+    </div>
+    
+    <div class="form-group">
+        <label for="password">密碼:</label>
+        <input type="password" id="password" value="password">
+    </div>
+    
+    <button onclick="login()">登入</button>
+    <button onclick="checkSession()">檢查 Session</button>
+    <button onclick="testInteract()">測試互動功能</button>
+    
+    <div id="result" class="result"></div>
+    
+    <script>
+        const resultDiv = document.getElementById('result');
+        
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const formData = new FormData();
+                formData.append('username', username);
+                formData.append('password', password);
+                
+                const response = await fetch('php/login.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const text = await response.text();
+                console.log('Login response:', text);
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<p style="color: green;">登入成功！</p>`;
+                    checkSession();
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">登入失敗：${text}</p>`;
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                resultDiv.innerHTML = `<p style="color: red;">登入錯誤：${error.message}</p>`;
+            }
+        }
+        
+        async function checkSession() {
+            try {
+                const response = await fetch('php/api/get_session_status.php');
+                const data = await response.json();
+                console.log('Session data:', data);
+                
+                resultDiv.innerHTML += `<p><strong>Session 狀態:</strong> ${JSON.stringify(data, null, 2)}</p>`;
+            } catch (error) {
+                console.error('Session check error:', error);
+                resultDiv.innerHTML += `<p style="color: red;">Session 檢查錯誤：${error.message}</p>`;
+            }
+        }
+        
+        async function testInteract() {
+            try {
+                // 測試會員資料 API
+                const userInfoResponse = await fetch('php/get_user_info.php');
+                const userInfoData = await userInfoResponse.json();
+                console.log('User info:', userInfoData);
+                
+                resultDiv.innerHTML += `<p><strong>會員資料:</strong> ${JSON.stringify(userInfoData, null, 2)}</p>`;
+                
+                // 測試訊息 API
+                const messagesResponse = await fetch('php/get_messages.php');
+                const messagesData = await messagesResponse.json();
+                console.log('Messages:', messagesData);
+                
+                resultDiv.innerHTML += `<p><strong>訊息資料:</strong> ${JSON.stringify(messagesData, null, 2)}</p>`;
+                
+            } catch (error) {
+                console.error('Interact test error:', error);
+                resultDiv.innerHTML += `<p style="color: red;">互動測試錯誤：${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

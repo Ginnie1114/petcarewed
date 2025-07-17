@@ -46,7 +46,7 @@
 /* ---------- 商品模組區塊 ---------- */
 .services-products {
   padding: 80px 0;
-  background-color: #fff;
+  background-color: #F8F8F5; 
 }
 
 .services-products h3 {
@@ -88,7 +88,9 @@
 
 .product-card img {
   width: 100%;
-  height: auto;
+  height: 300px;
+
+  object-fit: cover;
   display: block;
 }
 
@@ -120,3 +122,4 @@
     width: 90%;
   }
 }
+

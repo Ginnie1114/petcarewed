@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FunSafe｜互動中心</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Noto+Sans+TC&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconoir@7.6.0/css/iconoir.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/contact.css">
+  <link rel="stylesheet" href="css/interact.css">
+</head>
+<body>
+
+<header id="site-header">
+  <!-- Header 內容將由 global.js 動態生成 -->
+</header>
+
+<main class="interact-container">
+  <!-- 會員視角：單一互動區塊 -->
+  <section id="member-view" class="container" style="display:none;">
+    <div class="interact-header">
+      <h2>與 FunSafe 互動</h2>
+      <p>有任何照護需求或問題，歡迎直接留言給我們，我們會盡快回覆您。</p>
+    </div>
+
+    <!-- 會員資訊顯示 -->
+    <div class="user-info-card">
+      <h3>會員資訊</h3>
+      <p><strong>姓名：</strong><span id="user-name-display">載入中...</span></p>
+      <p><strong>Email：</strong><span id="user-email-display">載入中...</span></p>
+    </div>
+
+    <!-- 發送訊息區塊 -->
+    <div class="send-message-section">
+      <h3>傳送訊息</h3>
+      <form id="message-form" class="message-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pet-select">選擇寵物：</label>
+            <select id="pet-select" name="pet_id">
+              <option value="">一般諮詢（不指定寵物）</option>
+              <!-- 寵物選項由 JS 動態載入 -->
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="message-content">訊息內容：</label>
+          <textarea id="message-content" name="content" placeholder="請輸入您的訊息..." required rows="4"></textarea>
+        </div>
+        
+        <button type="submit" class="btn-main">傳送訊息</button>
+      </form>
+    </div>
+
+    <!-- 對話記錄區塊 -->
+    <div class="conversation-section">
+      <h3>對話記錄</h3>
+      <div class="messages-container" id="messages-container">
+        <p>載入中...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 商家視角：管理介面 -->
+  <section id="admin-view" class="container" style="display:none;">
+    <div class="interact-header">
+      <h2>商家互動管理</h2>
+      <p>管理與會員之間的對話，提供即時客服支援。</p>
+    </div>
+
+    <div class="admin-layout">
+      <!-- 左側會員列表 -->
+      <div class="users-panel">
+        <h3>會員列表</h3>
+        <div class="search-box">
+          <input type="text" id="user-search" placeholder="搜尋會員姓名或Email...">
+        </div>
+        <div class="users-list" id="users-list">
+          <p>載入中...</p>
+        </div>
+      </div>
+
+      <!-- 右側對話區塊 -->
+      <div class="conversation-panel">
+        <div id="admin-conversation" class="admin-conversation">
+          <div class="conversation-placeholder">
+            <p>請選擇左側會員以開始對話</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 未登入提示 -->
+  <section id="guest-view" class="container" style="display:none;">
+    <div class="interact-header">
+      <h2>請先登入</h2>
+      <p>您需要先登入才能使用互動功能</p>
+      <div class="auth-buttons">
+        <a href="login.html" class="btn-main">登入</a>
+        <a href="register.html" class="btn-main">註冊</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">Always Here, Always Safe.</div>
+    <div class="footer-columns">
+      <div><h4>Location</h4><p>1234 Pet St., Taipei, Taiwan</p></div>
+      <div><h4>Contact</h4><p>Email: info@funsafe.com<br>Phone: 02-1234-5678</p></div>
+      <div><h4>Follow us</h4>
+        <div class="footer-social">
+          <a href="https://instagram.com/" target="_blank" aria-label="Instagram"><i class="iconoir-instagram"></i></a>
+          <a href="https://facebook.com/" target="_blank" aria-label="Facebook"><i class="iconoir-facebook"></i></a>
+          <a href="https://line.me/" target="_blank" aria-label="Line"><i class="iconoir-chat-bubble"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/global.js"></script>
+<script src="js/interact.js"></script>
+<script>
+// 額外的調試資訊
+window.addEventListener('load', function() {
+    console.log('Page loaded');
+    console.log('Elements check at page load:', {
+        'user-name-display': !!document.getElementById('user-name-display'),
+        'user-email-display': !!document.getElementById('user-email-display'),
+        'pet-select': !!document.getElementById('pet-select'),
+        'messages-container': !!document.getElementById('messages-container'),
+        'member-view': !!document.getElementById('member-view'),
+        'admin-view': !!document.getElementById('admin-view'),
+        'guest-view': !!document.getElementById('guest-view')
+    });
+});
+</script>
+</body>
+</html>

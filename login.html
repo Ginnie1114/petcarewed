@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FunSafe｜會員登入</title>
+  <!-- Google Fonts 字型連結 -->
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Noto+Sans+TC&display=swap" rel="stylesheet">
+  <!-- icon -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconoir@7.6.0/css/iconoir.css">
+
+  <!-- 全站共用CSS -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+<header id="site-header">
+  <!-- Header 內容將由 global.js 動態生成 -->
+</header>
+
+<!-- 主要內容區：會員登入表單 -->
+<section class="contact-section">
+  <div class="container">
+    <h2>會員登入</h2>
+    <p>請輸入您的帳號與密碼登入。</p>
+    <!-- 登入表單，送出到 login.php 做驗證 -->
+    <form action="./php/login.php" method="post">
+      <label for="username">帳號</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">密碼</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">登入</button>
+    </form>
+    <!-- 註冊連結 -->
+    <p>還沒有帳號？<a href="register.html">立即註冊</a></p>
+  </div>
+</section>
+
+<!-- 註冊成功訊息彈窗 -->
+<div id="register-success-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999;background:rgba(0,0,0,0.3);">
+  <div style="background:#fff;padding:24px 32px;border-radius:8px;max-width:320px;margin:10vh auto;position:relative;box-shadow:0 2px 16px #0002;">
+    <button id="close-register-modal" style="position:absolute;top:8px;right:8px;background:none;border:none;font-size:20px;cursor:pointer;">×</button>
+    <div style="font-size:1.2em;margin-bottom:8px;">註冊成功！</div>
+    <div>請使用您的帳號密碼登入。</div>
+  </div>
+</div>
+<!-- 帳號已註冊訊息彈窗 -->
+<div id="register-exists-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999;background:rgba(0,0,0,0.3);">
+  <div style="background:#fff;padding:24px 32px;border-radius:8px;max-width:320px;margin:10vh auto;position:relative;box-shadow:0 2px 16px #0002;">
+    <button id="close-exists-modal" style="position:absolute;top:8px;right:8px;background:none;border:none;font-size:20px;cursor:pointer;">×</button>
+    <div style="font-size:1.2em;margin-bottom:8px;">此帳號已註冊</div>
+    <div>請直接登入，或使用其他帳號註冊。</div>
+  </div>
+</div>
+
+<!-- 頁腳區塊，包含聯絡資訊與社群連結 -->
+<footer>
+  <div class="container">
+    <div class="footer-top">Happy pets , happy you . </div>
+    <div class="footer-columns">
+      <div>
+        <h4>Location</h4>
+        <p>1234 Pet St., Taipei, Taiwan</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>Email: info@funsafe.com<br>Phone: 02-1234-5678</p>
+      </div>
+      <div>
+        <h4>Follow us</h4>
+        <div class="footer-social">
+          <!-- Instagram 連結 -->
+          <a href="https://instagram.com/" target="_blank" aria-label="Instagram">
+            <i class="iconoir-instagram"></i>
+          </a>
+          <!-- Facebook 連結 -->
+          <a href="https://facebook.com/" target="_blank" aria-label="Facebook">
+            <i class="iconoir-facebook"></i>
+          </a>
+          <!-- Line 連結 -->
+          <a href="https://line.me/" target="_blank" aria-label="Line">
+            <i class="iconoir-chat-bubble"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- 全站共用JS -->
+<script src="js/global.js"></script>
+<script src="js/login.js"></script>
+
+</body>
+</html>

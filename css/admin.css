@@ -1,0 +1,187 @@
+.admin-header {
+    background: #2E3426;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-header h1 {
+    font-family: 'Lilita One', cursive;
+    margin: 0;
+}
+
+.admin-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logout-btn {
+    background: #fff;
+    color: #2E3426;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.admin-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    min-height: 70vh;
+}
+
+.users-panel {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.user-item {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.user-item:hover {
+    background: #e9ecef;
+    border-color: #2E3426;
+}
+
+.user-item.active {
+    background: #2E3426;
+    color: white;
+}
+
+.details-panel {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.user-info {
+    background: white;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.pets-section {
+    background: white;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.pet-item {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.messages-section {
+    background: white;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.messages-container {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+.message-card {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+}
+
+.message-card.sent {
+    background: #e3f2fd;
+    margin-left: 2rem;
+}
+
+.message-card.received {
+    background: #f3e5f5;
+    margin-right: 2rem;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.pet-tag {
+    background: #2E3426;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.reply-form {
+    margin-top: 1rem;
+}
+
+.reply-form select,
+.reply-form textarea {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.reply-form button {
+    background: #2E3426;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.reply-form button:hover {
+    background: #1e221a;
+}
+
+@media (max-width: 768px) {
+    .admin-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .users-panel {
+        max-height: 50vh;
+    }
+}

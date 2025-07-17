@@ -11,31 +11,13 @@
 
 
   <!-- 共用樣式 -->
-  <link rel="stylesheet" href="./css/global.css">
+  <link rel="stylesheet" href="css/global.css">
   <!-- 此頁專用樣式 -->
-  <link rel="stylesheet" href="./css/about.css">
+  <link rel="stylesheet" href="css/about.css">
 </head>
 <body>
-  <!-- 🧭 導覽列（共用） -->
-<!-- 建議放在 <body> 裡的最上方 -->
 <header id="site-header">
-  <div class="container">
-    <h1><a href="index.html" class="logo">FunSafe</a></h1>
-    <!-- 漢堡按鈕（手機版顯示） -->
-    <div class="hamburger" id="hamburger-btn" aria-label="開啟主選單" tabindex="0">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="about.html">About</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="contact.html" class="book-now-btn">Book Now</a></li>
-      </ul>
-    </nav>
-  </div>
+  <!-- Header 內容將由 global.js 動態生成 -->
 </header>
   <!-- 🐾 關於我們內容區塊 -->
   <section class="about-intro">
@@ -43,29 +25,51 @@
       <div class="about-wrapper">
         <!-- 左側文字 -->
         <div class="about-text">
-          <h2>關於 FunSafe</h2>
+          <h2>Who we are?</h2>
           <p>
-            FunSafe 是為寵物與飼主打造的安心照護品牌，我們提供貼心、專業的服務，
-            希望每位毛孩都能快樂、安全地生活。
+            FunSafe 是為寵物與飼主打造的『放心』客製化照護品牌，我們提供貼心、專業的服務，
+            希望每位毛孩都能快樂、安全，飼主也能放心無憂。
           </p>
           <p>
-            從散步、寄宿、到緊急協助，我們的照護員團隊秉持著愛與責任，
-            為您與毛孩打造第二個家。
+            從散步、到府照顧、到緊急協助，我們的照護員團隊秉持著愛與責任，
+            為您與毛孩打造放心的後盾。
           </p>
+
+            <!-- 📊 統計數據區塊 -->
+            <section class="stat-section">
+              <div class="stat-box">
+                已有 <div class="stat-number" data-target="100">0</div> 寵物與主人獲得<br>Fun & Safe
+              </div>
+            </section>
+
+
+
+
+
         </div>
 
         <!-- 右側圖片 -->
         <div class="about-image">
-          <img src="./assets/超可愛.jpg" alt="狗狗圖片">
+          <img src="./assets/ＬＯＧＯ.png" alt="狗狗圖片">
         </div>
       </div>
     </div>
   </section>
 
+
+<div style="text-align: center; background-color: #F8F8F5;">
+  <a href="services.html" class="btn-main">探索服務</a>
+  <a href="interact.html" class="btn-main">聯絡我們</a>
+</div>
+
+
+
+
+
   <!-- 🦶 頁尾 Footer（共用） -->
   <footer>
     <div class="container">
-      <div class="footer-top">Your Site Title</div>
+      <div class="footer-top">Safe Moments, Fun Together.</div>
       <div class="footer-columns">
         <div>
           <h4>Location</h4>
@@ -93,7 +97,7 @@
   </footer>
 
   <!-- 共用功能 -->
-  <script src="./js/global.js"></script>
+  <script src="js/global.js"></script>
   <!-- 此頁 JS 功能（目前無互動）-->
   <!-- <script src="./js/about.js"></script> -->
 

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家強制登入</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, button { padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007cba; color: white; border: none; cursor: pointer; }
+        button:hover { background: #005a9e; }
+        .result { margin: 20px 0; padding: 15px; border-radius: 8px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .step { margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏪 商家強制登入工具</h1>
+        <p>這個工具將強制執行商家登入並直接跳轉到管理界面。</p>
+        
+        <div class="step">
+            <h2>步驟 1: 商家登入</h2>
+            <div class="form-group">
+                <label for="username">商家帳號:</label>
+                <input type="text" id="username" value="admin" style="width: 200px;">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">密碼:</label>
+                <input type="password" id="password" value="password" style="width: 200px;">
+            </div>
+            
+            <button onclick="forceLogin()">強制登入</button>
+            <button onclick="directToAdmin()">直接跳轉到管理界面</button>
+        </div>
+        
+        <div id="result"></div>
+    </div>
+    
+    <script>
+        async function forceLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                // 先清除所有 cookie
+                document.cookie.split(";").forEach(function(c) { 
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+                });
+                
+                resultDiv.innerHTML = '<div class="info">正在登入...</div>';
+                
+                // 執行登入
+                const formData = new FormData();
+                formData.append('username', username);
+                formData.append('password', password);
+                
+                const response = await fetch('php/login.php', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                });
+                
+                if (response.ok || response.status === 302) {
+                    resultDiv.innerHTML = '<div class="success">✅ 登入成功！正在檢查 session...</div>';
+                    
+                    // 檢查 session 狀態
+                    setTimeout(async () => {
+                        try {
+                            const sessionResponse = await fetch('php/api/get_session_status.php', {
+                                credentials: 'same-origin'
+                            });
+                            const sessionData = await sessionResponse.json();
+                            
+                            if (sessionData.loggedIn && sessionData.role === 'shop') {
+                                resultDiv.innerHTML += '<div class="success">✅ Session 設置成功！角色: ' + sessionData.role + '</div>';
+                                resultDiv.innerHTML += '<div class="info">即將跳轉到管理界面...</div>';
+                                
+                                // 3秒後跳轉
+                                setTimeout(() => {
+                                    window.location.href = 'interact.html';
+                                }, 3000);
+                            } else {
+                                resultDiv.innerHTML += '<div class="error">❌ Session 設置失敗或角色不正確</div>';
+                                resultDiv.innerHTML += '<div class="info">Session 資料: ' + JSON.stringify(sessionData) + '</div>';
+                            }
+                        } catch (error) {
+                            resultDiv.innerHTML += '<div class="error">❌ 檢查 session 錯誤: ' + error.message + '</div>';
+                        }
+                    }, 1000);
+                } else {
+                    resultDiv.innerHTML = '<div class="error">❌ 登入失敗，狀態碼: ' + response.status + '</div>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<div class="error">❌ 登入錯誤: ' + error.message + '</div>';
+            }
+        }
+        
+        function directToAdmin() {
+            // 直接跳轉，讓瀏覽器處理
+            window.location.href = 'interact.html';
+        }
+        
+        // 檢查當前狀態
+        window.addEventListener('load', async function() {
+            try {
+                const response = await fetch('php/api/get_session_status.php', {
+                    credentials: 'same-origin'
+                });
+                const data = await response.json();
+                
+                if (data.loggedIn) {
+                    document.getElementById('result').innerHTML = `
+                        <div class="info">
+                            <h3>當前登入狀態</h3>
+                            <p>已登入: ${data.loggedIn ? '是' : '否'}</p>
+                            <p>姓名: ${data.name || '未知'}</p>
+                            <p>角色: ${data.role || '未知'}</p>
+                            ${data.role === 'shop' ? 
+                                '<p><strong>✅ 您已經是商家，可以直接跳轉到管理界面</strong></p>' : 
+                                '<p><strong>⚠️ 您不是商家角色</strong></p>'
+                            }
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = '<div class="info">目前未登入</div>';
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = '<div class="error">檢查登入狀態失敗: ' + error.message + '</div>';
+            }
+        });
+    </script>
+</body>
+</html>

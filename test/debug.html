@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test</title>
+</head>
+<body>
+    <h1>Debug Test Page</h1>
+    <div id="debug-info"></div>
+    <script>
+        async function debugTest() {
+            const debugDiv = document.getElementById('debug-info');
+            
+            try {
+                // 1. 檢查 session 狀態
+                console.log('Testing session status...');
+                const sessionRes = await fetch('php/api/get_session_status.php');
+                const sessionData = await sessionRes.json();
+                console.log('Session data:', sessionData);
+                
+                debugDiv.innerHTML += `<p><strong>Session Status:</strong> ${JSON.stringify(sessionData)}</p>`;
+                
+                if (sessionData.loggedIn) {
+                    // 2. 檢查使用者資料
+                    console.log('Testing user info...');
+                    const userRes = await fetch('php/get_user_info.php');
+                    const userData = await userRes.json();
+                    console.log('User data:', userData);
+                    
+                    debugDiv.innerHTML += `<p><strong>User Info:</strong> ${JSON.stringify(userData)}</p>`;
+                    
+                    // 3. 檢查訊息
+                    console.log('Testing messages...');
+                    const messagesRes = await fetch('php/get_messages.php');
+                    const messagesData = await messagesRes.json();
+                    console.log('Messages data:', messagesData);
+                    
+                    debugDiv.innerHTML += `<p><strong>Messages:</strong> ${JSON.stringify(messagesData)}</p>`;
+                } else {
+                    debugDiv.innerHTML += `<p><strong>Not logged in</strong></p>`;
+                }
+                
+            } catch (error) {
+                console.error('Debug error:', error);
+                debugDiv.innerHTML += `<p><strong>Error:</strong> ${error.message}</p>`;
+            }
+        }
+        
+        debugTest();
+    </script>
+</body>
+</html>

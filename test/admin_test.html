@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家測試 - FunSafe</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin: 10px 0; }
+        label { display: block; margin-bottom: 5px; }
+        input, button { padding: 8px; margin: 5px 0; }
+        button { background: #007cba; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+        .result { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 8px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .step { margin: 20px 0; padding: 15px; border-left: 4px solid #007cba; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🏪 商家回覆訊息測試</h1>
+    
+    <div class="step">
+        <h2>步驟 1: 商家登入</h2>
+        <p>使用商家帳號登入系統</p>
+        
+        <div class="form-group">
+            <label for="admin-username">商家帳號:</label>
+            <input type="text" id="admin-username" value="admin">
+        </div>
+        
+        <div class="form-group">
+            <label for="admin-password">密碼:</label>
+            <input type="password" id="admin-password" value="password">
+        </div>
+        
+        <button onclick="loginAsAdmin()">商家登入</button>
+        <button onclick="checkAdminSession()">檢查商家登入狀態</button>
+    </div>
+    
+    <div class="step">
+        <h2>步驟 2: 查看會員列表</h2>
+        <p>取得有訊息的會員列表</p>
+        <button onclick="getUsersList()">取得會員列表</button>
+    </div>
+    
+    <div class="step">
+        <h2>步驟 3: 查看特定會員對話</h2>
+        <p>查看與特定會員的完整對話記錄</p>
+        
+        <div class="form-group">
+            <label for="user-id">會員ID:</label>
+            <input type="number" id="user-id" value="2" placeholder="輸入會員ID">
+        </div>
+        
+        <button onclick="getUserConversation()">取得會員對話</button>
+    </div>
+    
+    <div class="step">
+        <h2>步驟 4: 回覆會員訊息</h2>
+        <p>商家回覆會員的訊息</p>
+        
+        <div class="form-group">
+            <label for="reply-user-id">會員ID:</label>
+            <input type="number" id="reply-user-id" value="2">
+        </div>
+        
+        <div class="form-group">
+            <label for="reply-content">回覆內容:</label>
+            <textarea id="reply-content" placeholder="輸入回覆內容..." rows="3">感謝您的訊息！我們已經收到您的問題，將盡快為您處理。</textarea>
+        </div>
+        
+        <button onclick="sendReply()">發送回覆</button>
+    </div>
+    
+    <div class="step">
+        <h2>步驟 5: 使用完整商家界面</h2>
+        <p>登入後訪問完整的商家管理界面</p>
+        <button onclick="openAdminInterface()">開啟商家管理界面</button>
+    </div>
+    
+    <div id="result" class="result"></div>
+    
+    <script>
+        const resultDiv = document.getElementById('result');
+        
+        function showResult(message, type = 'info') {
+            resultDiv.className = `result ${type}`;
+            resultDiv.innerHTML = message;
+        }
+        
+        async function loginAsAdmin() {
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            
+            try {
+                const formData = new FormData();
+                formData.append('username', username);
+                formData.append('password', password);
+                
+                const response = await fetch('php/login.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    showResult('✅ 商家登入成功！', 'success');
+                    checkAdminSession();
+                } else {
+                    showResult('❌ 登入失敗', 'error');
+                }
+            } catch (error) {
+                showResult(`❌ 登入錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function checkAdminSession() {
+            try {
+                const response = await fetch('php/api/get_session_status.php');
+                const data = await response.json();
+                
+                if (data.loggedIn && data.role === 'shop') {
+                    showResult(`✅ 商家已登入<br>姓名: ${data.name}<br>角色: ${data.role}`, 'success');
+                } else {
+                    showResult('❌ 商家未登入或角色不正確', 'error');
+                }
+            } catch (error) {
+                showResult(`❌ 檢查登入狀態錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function getUsersList() {
+            try {
+                const response = await fetch('php/admin_get_users.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    let html = '<h3>📋 會員列表</h3>';
+                    data.users.forEach(user => {
+                        html += `
+                            <div style="border: 1px solid #ddd; padding: 10px; margin: 5px 0; border-radius: 4px;">
+                                <strong>ID: ${user.id}</strong> - ${user.name}<br>
+                                📧 ${user.email}<br>
+                                💬 未讀: ${user.unread_count || 0} 則<br>
+                                🕐 最後訊息: ${user.last_message_time || '無'}
+                            </div>
+                        `;
+                    });
+                    showResult(html, 'info');
+                } else {
+                    showResult(`❌ 取得會員列表失敗：${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ 取得會員列表錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function getUserConversation() {
+            const userId = document.getElementById('user-id').value;
+            
+            try {
+                const response = await fetch(`php/admin_get_user_data.php?user_id=${userId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    let html = `
+                        <h3>💬 會員對話記錄</h3>
+                        <div style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px;">
+                            <h4>👤 會員資訊</h4>
+                            <p><strong>姓名:</strong> ${data.user.name}</p>
+                            <p><strong>Email:</strong> ${data.user.email}</p>
+                            
+                            <h4>🐾 寵物列表</h4>
+                            ${data.pets.length === 0 ? '<p>該會員尚未註冊寵物</p>' : 
+                              data.pets.map(pet => `<span style="background: #e9ecef; padding: 4px 8px; border-radius: 4px; margin: 2px;">${pet.name} (${pet.type})</span>`).join(' ')
+                            }
+                            
+                            <h4>💬 對話記錄</h4>
+                            <div style="max-height: 300px; overflow-y: auto; border: 1px solid #eee; padding: 10px;">
+                    `;
+                    
+                    if (data.messages.length === 0) {
+                        html += '<p>目前沒有對話記錄</p>';
+                    } else {
+                        data.messages.forEach(message => {
+                            const sender = message.sender === 'user' ? '👤 會員' : '🏪 客服';
+                            const bgColor = message.sender === 'user' ? '#e3f2fd' : '#f1f8e9';
+                            html += `
+                                <div style="background: ${bgColor}; padding: 10px; margin: 5px 0; border-radius: 6px;">
+                                    <strong>${sender}</strong>
+                                    ${message.pet_name ? `<span style="background: #fff3cd; padding: 2px 6px; border-radius: 3px; font-size: 12px;">關於 ${message.pet_name}</span>` : ''}
+                                    <span style="float: right; font-size: 12px; color: #666;">${message.created_at}</span>
+                                    <p style="margin: 8px 0 0 0;">${message.content}</p>
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    html += '</div></div>';
+                    showResult(html, 'info');
+                } else {
+                    showResult(`❌ 取得對話記錄失敗：${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ 取得對話記錄錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        async function sendReply() {
+            const userId = document.getElementById('reply-user-id').value;
+            const content = document.getElementById('reply-content').value;
+            
+            if (!content.trim()) {
+                showResult('❌ 請輸入回覆內容', 'error');
+                return;
+            }
+            
+            try {
+                const formData = new FormData();
+                formData.append('user_id', userId);
+                formData.append('content', content);
+                
+                const response = await fetch('php/admin_send_message.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult('✅ 回覆已成功發送！', 'success');
+                    document.getElementById('reply-content').value = '';
+                } else {
+                    showResult(`❌ 發送回覆失敗：${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ 發送回覆錯誤：${error.message}`, 'error');
+            }
+        }
+        
+        function openAdminInterface() {
+            window.open('interact.html', '_blank');
+        }
+    </script>
+</body>
+</html>
